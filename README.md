@@ -3,8 +3,10 @@
 * [Install Bazel](https://docs.bazel.build/versions/master/install.html)
 * Clone or download copy of this repo or https://github.com/google/mediapipe
 * Run the following:
+
       mkdir ./mediapipe/examples/android/src/java/com/google/mediapipe/apps/aarhandtracking
       touch ./mediapipe/examples/android/src/java/com/google/mediapipe/apps/aarhandtracking/BUILD
+
 * Add following to the new `BUILD` file
 
       load("//mediapipe/java/com/google/mediapipe:mediapipe_aar.bzl", "mediapipe_aar")
