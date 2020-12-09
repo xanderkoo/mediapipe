@@ -88,6 +88,13 @@ cat > $(OUTS) <<EOF
     )
 
     _proto_java_src_generator(
+        name = "rect_proto",
+        proto_src = "mediapipe/framework/rect.proto",
+        java_lite_out = "com/google/mediapipe/formats/proto/RectProto.java",
+        srcs = ["//mediapipe/framework/formats:protos_src"],
+    )
+
+    _proto_java_src_generator(
         name = "landmark_proto",
         proto_src = "mediapipe/framework/formats/landmark.proto",
         java_lite_out = "com/google/mediapipe/formats/proto/LandmarkProto.java",

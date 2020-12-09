@@ -1,72 +1,71 @@
-## MediaPipe AAR Build Guide (For Mac, maybe Linux too)
+## MediaPipe AAR Build Guide (For Mac/Linux)
 
-* [Install Bazel](https://docs.bazel.build/versions/master/install.html)
-* Clone or download copy of this repo or https://github.com/google/mediapipe
-* Run the following:
+_Note: I haven't verified that this works with Linux._
 
-      mkdir ./mediapipe/examples/android/src/java/com/google/mediapipe/apps/aarhandtracking
-      touch ./mediapipe/examples/android/src/java/com/google/mediapipe/apps/aarhandtracking/BUILD
+1. [Install Bazel](https://docs.bazel.build/versions/master/install.html)
+2. Clone or download copy of this repo or https://github.com/google/mediapipe
+      * If you clone this repo, skip to Step 6
+3. Run the following:
 
-* Add following to the new `BUILD` file
+       mkdir ./mediapipe/examples/android/src/java/com/google/mediapipe/apps/aarhandtracking
+       touch ./mediapipe/examples/android/src/java/com/google/mediapipe/apps/aarhandtracking/BUILD
 
-      load("//mediapipe/java/com/google/mediapipe:mediapipe_aar.bzl", "mediapipe_aar")
+4. Add following to the new `BUILD` file
 
-      mediapipe_aar(
-          name = "mp_hand_tracking_aar",
-          calculators = ["//mediapipe/graphs/hand_tracking:mobile_calculators"],
-      )
+       load("//mediapipe/java/com/google/mediapipe:mediapipe_aar.bzl", "mediapipe_aar")
 
-* Add the following snippet to `./mediapipe/java/com/google/mediapipe/mediapipe_aar.bzl`
+       mediapipe_aar(
+           name = "mp_hand_tracking_aar",
+           calculators = ["//mediapipe/graphs/hand_tracking:mobile_calculators"],
+       )
 
-      // under this definition
-      def mediapipe_aar(name, calculators = [], assets = [], assets_dir = ""):
+5. Add the following snippet to `./mediapipe/java/com/google/mediapipe/mediapipe_aar.bzl`
 
-            ...
+       def mediapipe_aar(name, calculators = [], assets = [], assets_dir = ""):
 
-            _proto_java_src_generator(
-                  name = "rect_proto",
-                  proto_src = "mediapipe/framework/rect.proto",
-                  java_lite_out = "com/google/mediapipe/formats/proto/RectProto.java",
-                  srcs = ["//mediapipe/framework/formats:protos_src"],
-            )
+             ...
 
-            ...
+             _proto_java_src_generator(
+                   name = "rect_proto",
+                   proto_src = "mediapipe/framework/rect.proto",
+                   java_lite_out = "com/google/mediapipe/formats/proto/RectProto.java",
+                   srcs = ["//mediapipe/framework/formats:protos_src"],
+             )
 
-* Run the following to prepare our directories:
+             ...
 
-      mkdir -p ~/android/sdk
-      mkdir -p ~/android/ndk
-      export SDK_PATH="~/android/sdk"
-      export NDK_PATH="~/android/ndk"
+6. Run the following to prepare our directories (you can delete these after you're done):
 
-* Install SDK and NDK:
-    * Go [here](https://developer.android.com/studio/index.html#command-tools) to find the latest command line tools, and copy the link to the latest download, e.g. https://dl.google.com/android/repository/commandlinetools-mac-6858069_latest.zip
+       export SDK_PATH="${HOME}/android/sdk"
+       export NDK_PATH="${HOME}/android/ndk"
+       mkdir -p "${SDK_PATH}"
+       mkdir -p "${NDK_PATH}"
+
+7. Install SDK and NDK:
+      * Go [here](https://developer.android.com/studio/index.html#command-tools) to find the latest command line tools, and copy the link to the latest download, e.g. https://dl.google.com/android/repository/commandlinetools-mac-6858069_latest.zip
           
-          export SDK_DOWNLOAD_URL="{put url here}"
-    
-    * Go [here](https://developer.android.com/ndk/downloads) to find the latest NDK download, and copy the link to the latest download, e.g. https://dl.google.com/android/repository/android-ndk-r21d-darwin-x86_64.zip
+            export SDK_DOWNLOAD_URL="{put url here}"
+      * Go [here](https://developer.android.com/ndk/downloads) to find the latest NDK download, and copy the link to the latest download, e.g. https://dl.google.com/android/repository/android-ndk-r21d-darwin-x86_64.zip
 
-          export NDK_DOWNLOAD_URL="{put url here}"
+            export NDK_DOWNLOAD_URL="{put url here}"
 
-    * Copy the Latest Stable Version id, e.g. r21d
+      * Copy the Latest Stable Version id, e.g. `r21d`
 
-          export NDK_VERSION="{put version number here}"
+            export NDK_VERSION="{put version number here}"
 
-* Now install the NDK and SDK with the script:
+8. Now install the NDK and SDK with the script:
 
-      mv /path/to/script/setup_android_sdk_and_ndk_modified.sh <mediapipe root dir> # e.g. ~/Downloads/mediapipe-master/
-      cd <mediapipe root dir>
-      bash ./setup_android_sdk_and_ndk.sh "${SDK_PATH}" "${NDK_PATH}" "${NDK_VERSION}" "${SDK_DOWNLOAD}" "${NDK_VERSION}"
+       bash ./setup_android_sdk_and_ndk_modified.sh "${SDK_PATH}" "${NDK_PATH}" "${NDK_VERSION}" "${SDK_DOWNLOAD_URL}" "${NDK_DOWNLOAD_URL}"
 
-* Run the following:
+9. Run the following:
 
-      export ANDROID_HOME="${SDK_PATH}"
-      export ANDROID_NDK_HOME="${NDK_PATH}/android-ndk-${NDK_VERSION}"
-      brew install opencv3
-      brew install opencv@3
+       export ANDROID_HOME="${SDK_PATH}"
+       export ANDROID_NDK_HOME="${NDK_PATH}/android-ndk-${NDK_VERSION}"
+       brew install opencv3
+       brew install opencv@3
 
-* Run the Bazel build command as such:
+10. Run the Bazel build command as such:
 
-      bazel build -c opt --host_crosstool_top=@bazel_tools//tools/cpp:toolchain --fat_apk_cpu=arm64-v8a,armeabi-v7a //mediapipe/examples/android/src/java/com/google/mediapipe/apps/aarhandtracking:mp_hand_tracking_aar
+        bazel build -c opt --host_crosstool_top=@bazel_tools//tools/cpp:toolchain --fat_apk_cpu=arm64-v8a,armeabi-v7a //mediapipe/examples/android/src/java/com/google/mediapipe/apps/aarhandtracking:mp_hand_tracking_aar
 
-* AAR file should build to `./mediapipe-master/bazel-bin/mediapipe/examples/android/src/java/com/google/mediapipe/apps/aarhandtracking`
+AAR file should build to `./bazel-bin/mediapipe/examples/android/src/java/com/google/mediapipe/apps/aarhandtracking`
