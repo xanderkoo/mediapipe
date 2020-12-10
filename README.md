@@ -1,5 +1,9 @@
 ## MediaPipe AAR Build Guide (For Mac/Linux)
 
+This repo is meant to be a guide for building an MediaPipe plugin for Android, specifically to be used in Unity.
+This example uses Hand Tracking, but other dependencies can probably also be subbed in easily.
+Please reference [this official guide](https://google.github.io/mediapipe/getting_started/android_archive_library.html) for more info.
+
 _Note: I haven't verified that this works with Linux._
 
 1. [Install Bazel](https://docs.bazel.build/versions/master/install.html)
@@ -10,7 +14,7 @@ _Note: I haven't verified that this works with Linux._
        mkdir ./mediapipe/examples/android/src/java/com/google/mediapipe/apps/aarhandtracking
        touch ./mediapipe/examples/android/src/java/com/google/mediapipe/apps/aarhandtracking/BUILD
 
-4. Add following to the new `BUILD` file
+4. Add following to the new `BUILD` file:
 
        load("//mediapipe/java/com/google/mediapipe:mediapipe_aar.bzl", "mediapipe_aar")
 
