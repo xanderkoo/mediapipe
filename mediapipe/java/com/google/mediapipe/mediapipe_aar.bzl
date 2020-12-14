@@ -89,7 +89,7 @@ cat > $(OUTS) <<EOF
 
     _proto_java_src_generator(
         name = "rect_proto",
-        proto_src = "mediapipe/framework/rect.proto",
+        proto_src = "mediapipe/framework/formats/rect.proto",
         java_lite_out = "com/google/mediapipe/formats/proto/RectProto.java",
         srcs = ["//mediapipe/framework/formats:protos_src"],
     )
@@ -138,6 +138,7 @@ cat > $(OUTS) <<EOF
             "com/google/mediapipe/formats/proto/LandmarkProto.java",
             "com/google/mediapipe/formats/proto/DetectionProto.java",
             "com/google/mediapipe/formats/proto/LocationDataProto.java",
+            "com/google/mediapipe/formats/proto/RectProto.java",
             "com/google/mediapipe/formats/annotation/proto/RasterizationProto.java",
         ],
         manifest = "AndroidManifest.xml",
@@ -147,6 +148,7 @@ cat > $(OUTS) <<EOF
             "//mediapipe/framework:calculator_java_proto_lite",
             "//mediapipe/framework:calculator_profile_java_proto_lite",
             "//mediapipe/framework/tool:calculator_graph_template_java_proto_lite",
+            "//mediapipe/framework/formats:rect_java_proto_lite",
             "//third_party:androidx_annotation",
             "//third_party:androidx_appcompat",
             "//third_party:androidx_core",
